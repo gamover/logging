@@ -1,0 +1,8 @@
+body {
+    padding-top: 70px;
+}
+
+.message-panel .panel-body {
+    height: 700px;
+    overflow-y: scroll;
+}

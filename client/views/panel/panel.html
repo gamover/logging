@@ -1,0 +1,15 @@
+<template name="panel">
+  <div class="panel panel-default message-panel">
+    <div class="panel-heading">
+      {{>filter}}
+    </div>
+    <div class="panel-body">
+      {{>messages}}
+    </div>
+    {{#if showMore}}
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default btn-sm show-more">More</button>
+      </div>
+    {{/if}}
+  </div>
+</template>

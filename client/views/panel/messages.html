@@ -1,0 +1,22 @@
+<template name="messages">
+  <table class="table table-stripped table-condensed table-hover messages-table">
+    <thead>
+      <tr>
+        <th class="text-center">Type</th>
+        <th class="text-center">Source</th>
+        <th class="text-center">Message</th>
+        <th class="text-center">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each messages}}
+        <tr class="{{messageTypeClass type}}">
+          <td class="text-center"><span class="label label-{{messageTypeClass type}}">{{type}}</span></td>
+          <td class="text-center">{{source}}</td>
+          <td>{{message}}</td>
+          <td class="text-center">{{prettyDate date}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
