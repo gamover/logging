@@ -28,6 +28,15 @@
           </div>
         </div>
       </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">Dates</span>
+            <input type="text" name="dates" class="form-control input-sm" readonly>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="row">
@@ -39,19 +48,13 @@
           </div>
         </div>
       </div>
-
-      <div class="col-md-4">
-        <div class="form-group">
-
-        </div>
-      </div>
     </div>
 
     <div class="row">
       <div class="col-md-12">
         <div class="pull-right">
           <div class="btn-group ">
-            <button type="submit" class="btn btn-default btn-sm">Filter</button>
+            <button type="submit" class="btn btn-default btn-sm {{#if filtered}}btn-success{{else}}btn-default{{/if}}">Filter</button>
             <button type="button" class="btn btn-danger btn-sm reset-filter">Reset</button>
           </div>
           <button type="button" name="pause" class="btn btn-sm {{#if paused}}active btn-success{{else}}btn-default{{/if}} pause-sync">Pause sync</button>

@@ -1,4 +1,4 @@
-generateMessage = (type = null, source = null)->
+generateMessage = (type, source)->
   type = type ? Random.choice MESSAGE_TYPES
   source = source ? Random.choice SOURCES
   type: type
@@ -7,20 +7,35 @@ generateMessage = (type = null, source = null)->
   date: new Date()
 
 Logs.remove({})
-((cnt) -> Logs.insert generateMessage()) cnt for cnt in [1..100]
+(-> Logs.insert generateMessage()) cnt for cnt in [1..100]
 
-Meteor.publish 'messages', (limit = 0, type = null, source = null) ->
+Meteor.publish 'messages', (filter, sort, limit, search)->
   selector = {}
-  if type?
-    selector.type = type
-  if source?
-    selector.source = source
+  if filter?
+    if filter.type?
+      selector.type = filter.type
+    if filter.source?
+      selector.source = filter.source
+    if filter.startDate? and filter.endDate?
+      selector.$and = [
+        { date: { $gte: filter.startDate } }
+        { date: { $lte: filter.endDate } }
+      ]
+  if search?.message?
+    selector.message = { $regex: search.message }
 
-  if limit >= Logs.find(selector).count() - MESSAGES_INCREMENT
+  params = {}
+  if sort? and sort.field? and sort.dir?
+    params.sort = {}
+    params.sort[sort.field] = sort.dir
+  if limit?
+    params.limit = limit
+
+  count = Logs.find(selector).count()
+  if limit >= count - MESSAGES_INCREMENT
     Meteor.setTimeout ->
-      count = Logs.find(selector).count() + 1
-      ((cnt) -> Logs.insert generateMessage(type, source)) cnt for cnt in [count..count + MESSAGES_INCREMENT - 1]
+      (-> Logs.insert generateMessage filter?.type, filter?.source) cnt for cnt in [count + 1..count + MESSAGES_INCREMENT]
     , 0
 
   Counts.publish this, 'messagesCount', Logs.find selector
-  Logs.find selector, limit: limit
+  Logs.find selector, params
